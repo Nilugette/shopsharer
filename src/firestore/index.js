@@ -18,3 +18,19 @@ const firebaseApp = !firebase.apps.length
 const db = firebaseApp.firestore();
 const auth = firebaseApp.auth();
 const storage = firebaseApp.storage();
+
+export async function signInWithGoogle() {
+   const provider = new firebase.auth.GoogleAuthProvider()
+   await auth.signInWithPopup(provider)
+   window.location.reload()
+}
+
+//Check if the user is authenticated or not
+export function checkAuth(cb) {
+   return auth.onAuthStateChanged(cb)
+}
+
+export async function logOut() {
+    await auth.signOut()
+    window.location.reload()
+}
