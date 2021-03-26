@@ -34,3 +34,17 @@ export async function logOut() {
     await auth.signOut()
     window.location.reload()
 }
+
+// To get our entire collection list
+export async function getCollection(id) {
+    const snapshot = await db.collection(id).get()
+    const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+    console.log(data, 'collection')
+}
+
+// To get user list
+export async function getUserLists(userId) {
+    const snapshot = await db.collection('lists').where('author', '==', userId).get()
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+    
+}
