@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Layout from "../components/shared/Layout";
 import CreateItem from "../components/CreateItem";
 import ItemList from "../components/ItemList";
-//import JoinList from "../components/JoinList";
+import JoinList from "../components/JoinList";
 import Error from "../components/shared/Error";
 import Loading from "../components/shared/Loading";
 import * as db from "../firestore";
@@ -16,6 +16,11 @@ function ListPage({ location }) {
   const { data: list, error } = useSWR(listId, db.getList)
   if(error) return <Error message={error.message} />
   if(!list) return <Loading />
+  const isNewUser = list.users.every(u => u.id !== user.uid)
+  if(isNewUser) {
+    return <JoinList list={list} listId={listId} user={user} />
+  }
+
   return (
     <Layout>
       <section className="text-gray-500 bg-gray-900 body-font">
